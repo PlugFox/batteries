@@ -47,10 +47,21 @@ void main() => group('stream', () {
           ]).map<bool>(isPrime).asBroadcastStream().relieve(duration),
           emitsInOrder(firstThousand),
         );
+        expectLater(
+          () async {
+            int? value;
+            Stream<int>.fromIterable(<int>[1, 2, 3])
+                .map<int>((e) => value = e)
+                .relieve(duration);
+            await Future<void>.delayed(duration * 2);
+            return value;
+          }(),
+          completion(isNull),
+        );
       });
 
       test('calm', () {
-        const duration = Duration(microseconds: 100);
+        const duration = Duration(milliseconds: 150);
         final data = Iterable<int>.generate(100).toList(growable: false);
 
         expectLater(
@@ -83,16 +94,14 @@ void main() => group('stream', () {
         );
         expectLater(
           () async {
-            final sw = Stopwatch()..start();
-            await Stream<int>.fromIterable(<int>[1, 2, 3])
-                .asBroadcastStream()
-                .calm(const Duration(milliseconds: 250))
-                .take(3)
-                .drain<void>();
-            final elapsed = (sw..stop()).elapsedMilliseconds;
-            return elapsed > 500 && elapsed < 750;
+            int? value;
+            Stream<int>.fromIterable(<int>[1, 2, 3])
+                .map<int>((e) => value = e)
+                .calm(duration);
+            await Future<void>.delayed(duration * 2);
+            return value;
           }(),
-          completion(isTrue),
+          completion(isNull),
         );
       });
     });
