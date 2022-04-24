@@ -11,7 +11,7 @@ homepage: https://github.com/PlugFox/batteries
 #  - Plague Fox <plugfox@gmail.com>
 
 environment:
-  sdk: '>=2.16.0-134.0.dev <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   meta: ^1.7.0
