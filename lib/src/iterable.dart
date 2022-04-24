@@ -1,9 +1,10 @@
+import 'dart:collection';
 import 'dart:math' as math;
 
 /// {@template collection.iterable_extensions}
 /// [Iterable] extension methods.
 /// {@endtemplate}
-extension IterableX<T> on Iterable<T> {
+extension BatteriesIterableX<T> on Iterable<T> {
   /// Chunk while
   Iterable<List<T>> chunkWhile(bool Function(T a, T b) test) sync* {
     final i = iterator;
@@ -46,12 +47,24 @@ extension IterableX<T> on Iterable<T> {
       sw.stop();
     }
   }
+
+  /// Return only unique elements from the iterable.
+  /// [hash] function ussumally returning id of the element.
+  Iterable<T> distinct([Object? Function(T a)? hash]) {
+    if (hash != null) {
+      final set = HashSet<Object?>();
+      return where((e) => set.add(hash(e)));
+    } else {
+      final set = HashSet<T>();
+      return where(set.add);
+    }
+  }
 }
 
-/// {@template iterable.utf8_code_units}
-/// Iterable<int> as UTF-8 code units.
+/// {@template iterable.code_units}
+/// Iterable<int> as code units.
 /// {@endtemplate}
-extension UTF8CodeUnitsX on Iterable<int> {
+extension BatteriesCodeUnitsX on Iterable<int> {
   /// Check code is digit
   /// 0..9: 48..57
   static bool isDigit(int code) => code > 47 && code < 58;

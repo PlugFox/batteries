@@ -143,38 +143,82 @@ void main() => group('stream', () {
             await controller.close();
           },
         );
-        test(
-          'Transformer retains inertia stream contract on broadcast stream',
+        test('Transformer retains inertia stream contract on broadcast stream',
+            () async {
+          StreamSubscription<A>? sub;
+          var transformedHasEmitted = false;
+          final controller = StreamController<A>.broadcast();
+          final transformed = controller.stream
+              .transformOnType<C>((selected) => selected)
+              .map((event) {
+            transformedHasEmitted = true;
+            return event;
+          });
+
+          Future<void> nextEventLoop() => Future<void>.delayed(Duration.zero);
+          void emit() => controller.add(const C('a'));
+          void subscribe() => sub = transformed.listen((event) {});
+
+          await nextEventLoop();
+          expect(transformedHasEmitted, false);
+          emit();
+          await nextEventLoop();
+          expect(transformedHasEmitted, false);
+          subscribe();
+          await nextEventLoop();
+          expect(transformedHasEmitted, false);
+          emit();
+          await nextEventLoop();
+          expect(transformedHasEmitted, true);
+
+          await sub?.cancel();
+          await controller.close();
+        });
+      });
+      test('calm', () {
+        const duration = Duration(microseconds: 100);
+        final data = Iterable<int>.generate(100).toList(growable: false);
+
+        expectLater(
+          Stream<int>.fromIterable(data).calm(duration).toList(),
+          completes,
+        );
+        expectLater(
+          Stream<int>.fromIterable(<int>[]).calm(duration),
+          neverEmits(anything),
+        );
+        expectLater(
+          Stream<int>.fromIterable(data).calm(duration).toList(),
+          completion(data),
+        );
+        expectLater(
+          Stream<int>.fromIterable(data).calm(duration),
+          emitsInOrder(data),
+        );
+        expectLater(
           () async {
-            StreamSubscription<A>? sub;
-            var transformedHasEmitted = false;
-            final controller = StreamController<A>.broadcast();
-            final transformed = controller.stream
-                .transformOnType<C>((selected) => selected)
-                .map((event) {
-              transformedHasEmitted = true;
-              return event;
-            });
-
-            Future<void> nextEventLoop() => Future<void>.delayed(Duration.zero);
-            void emit() => controller.add(const C('a'));
-            void subscribe() => sub = transformed.listen((event) {});
-
-            await nextEventLoop();
-            expect(transformedHasEmitted, false);
-            emit();
-            await nextEventLoop();
-            expect(transformedHasEmitted, false);
-            subscribe();
-            await nextEventLoop();
-            expect(transformedHasEmitted, false);
-            emit();
-            await nextEventLoop();
-            expect(transformedHasEmitted, true);
-
-            await sub?.cancel();
-            await controller.close();
-          },
+            final sw = Stopwatch()..start();
+            await Stream<int>.fromIterable(<int>[1, 2, 3])
+                .calm(const Duration(milliseconds: 250))
+                .take(3)
+                .drain<void>();
+            final elapsed = (sw..stop()).elapsedMilliseconds;
+            return elapsed > 500 && elapsed < 750;
+          }(),
+          completion(isTrue),
+        );
+        expectLater(
+          () async {
+            final sw = Stopwatch()..start();
+            await Stream<int>.fromIterable(<int>[1, 2, 3])
+                .asBroadcastStream()
+                .calm(const Duration(milliseconds: 250))
+                .take(3)
+                .drain<void>();
+            final elapsed = (sw..stop()).elapsedMilliseconds;
+            return elapsed > 500 && elapsed < 750;
+          }(),
+          completion(isTrue),
         );
       });
     });
