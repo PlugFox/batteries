@@ -1,12 +1,8 @@
-# [0.0.2-dev](#002-dev)
+# 0.0.2-dev
   
-## Added
-  
-- Releave extension for Iterable and Stream
+- [Added] Releave extension for Iterable and Stream
 
-# [0.0.1-dev](#001-dev)
+# 0.0.1-dev
   
-## Added
-  
-- Collection's classes and extensions
-- String extensions
+- [Added] Collection's classes and extensions
+- [Added] String extensions
