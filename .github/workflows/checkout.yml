@@ -31,7 +31,7 @@ jobs:
   checkout:
     runs-on: ubuntu-latest
     container:
-      image: google/dart:2.16-dev
+      image: google/dart:beta
     steps:
       - uses: actions/checkout@v2
         with:
