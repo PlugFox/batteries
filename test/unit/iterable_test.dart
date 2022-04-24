@@ -112,4 +112,25 @@ void main() => group('iterable', () {
           ]),
         );
       });
+
+      test('distinct', () {
+        final source = <int>[7, 1, 2, 2, 1, 3, 1];
+        final result = <int>[7, 1, 2, 3];
+        expect(
+          () => source.distinct().toList(),
+          returnsNormally,
+        );
+        expect(
+          source.distinct().toList(),
+          equals(result),
+        );
+        expect(
+          source.distinct((e) => e).toList(),
+          equals(result),
+        );
+        expect(
+          source.distinct((e) => e.isEven).toList(),
+          equals(<int>[7, 2]),
+        );
+      });
     });

@@ -1,9 +1,9 @@
-import 'package:batteries/src/iterable.dart' show UTF8CodeUnitsX;
+import 'package:batteries/src/iterable.dart' show BatteriesCodeUnitsX;
 
 /// {@template string.string_extensions}
 /// String extensions.
 /// {@endtemplate}
-extension StringX on String {
+extension BatteriesStringX on String {
   /// Split string to numbers
   List<int> splitToNumbers([int max = 8]) => codeUnits
       .fold<List<int>>(
