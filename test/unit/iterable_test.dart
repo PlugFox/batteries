@@ -70,4 +70,46 @@ void main() => group('iterable', () {
           equals(0),
         );
       });
+      test('relieve', () {
+        const duration = Duration(microseconds: 100);
+        bool isPrime(int n) {
+          if (n > 1) {
+            for (var i = 2; i < n; i++) {
+              if (n % i != 0) continue;
+              return false;
+            }
+            return true;
+          } else {
+            return false;
+          }
+        }
+
+        expectLater(
+          Iterable<int>.generate(1000)
+              .map<bool>(isPrime)
+              .relieve(duration)
+              .toList(),
+          completes,
+        );
+
+        expectLater(
+          Iterable<int>.generate(1000)
+              .relieve(duration)
+              .map<bool>(isPrime)
+              .toList(),
+          completes,
+        );
+        expectLater(
+          Iterable<int>.generate(1000).relieve(duration).toList(),
+          completion(Iterable<int>.generate(1000).toList()),
+        );
+        expectLater(
+          <int>[
+            for (var i = 0; i < 1000; i++) i,
+          ].relieve(duration),
+          emitsInOrder(<int>[
+            for (var i = 0; i < 10; i++) i,
+          ]),
+        );
+      });
     });
