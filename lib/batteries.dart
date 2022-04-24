@@ -1,10 +1,5 @@
 /// Batteries for flutter and dart.
 library batteries;
 
-/// {@template batteries.placeholder}
-/// Placeholder
-/// {@endtemplate}
-class Placeholder {
-  /// {@macro batteries.placeholder}
-  Placeholder();
-}
+export 'package:batteries/src/iterable.dart';
+export 'package:batteries/src/list.dart';
