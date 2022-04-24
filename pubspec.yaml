@@ -1,7 +1,7 @@
 name: batteries
 description: >
   A set of typical classes, extensions and utilities for dart and flutter that help in development.
-version: 1.0.0+1
+version: 0.0.1-beta
 repository: https://github.com/PlugFox/batteries
 issue_tracker: https://github.com/PlugFox/batteries/issues
 homepage: https://github.com/PlugFox/batteries
