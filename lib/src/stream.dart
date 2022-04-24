@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 /// {@template stream.stream_extensions}
 /// Stream extension methods.
 /// {@endtemplate}
-extension StreamX<T> on Stream<T> {
+extension BatteriesStreamX<T> on Stream<T> {
   /// {@macro stream.relieve_stream_transformer}
   Stream<T> relieve([
     Duration duration = const Duration(milliseconds: 4),
