@@ -1,13 +1,15 @@
 // ignore_for_file: unnecessary_lambdas
 
-import 'package:batteries/batteries.dart';
 import 'package:test/test.dart';
+
+import 'unit/iterable_test.dart' as unit_iterable;
+import 'unit/list_test.dart' as unit_list;
+import 'unit/string_test.dart' as unit_string;
 
 void main() {
   group('unit', () {
-    test('placeholder', () {
-      expect(() => Placeholder(), returnsNormally);
-      expect(Placeholder(), isA<Placeholder>());
-    });
+    unit_iterable.main();
+    unit_list.main();
+    unit_string.main();
   });
 }

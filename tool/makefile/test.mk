@@ -1,10 +1,10 @@
 .PHONY: test coverage check fix format test-beta
 
 test: get
-	@dart test --concurrency=6 --platform vm --coverage=coverage test/*
+	@dart test --concurrency=6 --platform vm --coverage=coverage test/all_test.dart
 
 coverage: test
-	@dart run coverage:format_coverage --packages=.packages --in=coverage/coverage.json --report-on lib --lcov --out=coverage/lcov.info
+	@dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
 	@genhtml -o coverage coverage/lcov.info
 
 check:

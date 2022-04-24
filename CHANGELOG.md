@@ -1,26 +1,6 @@
-# [Unreleased](#unreleased)
+# [0.0.1-dev](#000-dev)
   
 ## Added
   
-- 
-  
-## Changed
-  
-- 
-  
-## Deprecated
-  
-- 
-  
-## Removed
-  
-- 
-  
-## Fixed
-  
-- 
-  
-## Security
-  
-- 
-  
+- Collection's classes and extensions
+- String extensions
