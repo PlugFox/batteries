@@ -2,25 +2,4 @@
   
 ## Added
   
-- 
-  
-## Changed
-  
-- 
-  
-## Deprecated
-  
-- 
-  
-## Removed
-  
-- 
-  
-## Fixed
-  
-- 
-  
-## Security
-  
-- 
-  
+- Collection's classes and extensions
