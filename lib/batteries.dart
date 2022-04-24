@@ -3,3 +3,4 @@ library batteries;
 
 export 'package:batteries/src/iterable.dart';
 export 'package:batteries/src/list.dart';
+export 'package:batteries/src/string.dart';

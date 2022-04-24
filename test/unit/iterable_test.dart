@@ -45,4 +45,29 @@ void main() => group('iterable', () {
           ],
         );
       });
+
+      test('max_min', () {
+        expect(
+          () => Iterable<int>.generate(100).max,
+          returnsNormally,
+        );
+        expect(
+          () => Iterable<int>.generate(100).min,
+          returnsNormally,
+        );
+        expect(
+          <int>[
+            for (var i = 0; i < 10; i++) i,
+            for (var i = 0; i < 10; i++) 9 - i,
+          ].max,
+          equals(9),
+        );
+        expect(
+          <int>[
+            for (var i = 0; i < 10; i++) 9 - i,
+            for (var i = 0; i < 10; i++) i,
+          ].min,
+          equals(0),
+        );
+      });
     });
