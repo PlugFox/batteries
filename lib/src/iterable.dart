@@ -22,6 +22,30 @@ extension IterableX<T> on Iterable<T> {
   /// Split when
   Iterable<List<T>> splitWhen(bool Function(T a, T b) test) =>
       chunkWhile((a, b) => !test(a, b));
+
+  /// Allow relieve impact on event loop on large collections.
+  /// Parallelize the event queue and free up time for processing animation,
+  /// user gestures without using isolates.
+  ///
+  /// [duration] - elapsed time of iterations before releasing
+  /// the event queue and microtasks.
+  Stream<T> relieve([
+    Duration duration = const Duration(milliseconds: 4),
+  ]) async* {
+    final sw = Stopwatch()..start();
+    try {
+      final iter = iterator;
+      while (iter.moveNext()) {
+        if (sw.elapsed > duration) {
+          await Future<void>.delayed(Duration.zero);
+          sw.reset();
+        }
+        yield iter.current;
+      }
+    } finally {
+      sw.stop();
+    }
+  }
 }
 
 /// {@template iterable.utf8_code_units}
