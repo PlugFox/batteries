@@ -48,4 +48,51 @@ void main() => group('stream', () {
           emitsInOrder(firstThousand),
         );
       });
+
+      test('calm', () {
+        const duration = Duration(microseconds: 100);
+        final data = Iterable<int>.generate(100).toList(growable: false);
+
+        expectLater(
+          Stream<int>.fromIterable(data).calm(duration).toList(),
+          completes,
+        );
+        expectLater(
+          Stream<int>.fromIterable(<int>[]).calm(duration),
+          neverEmits(anything),
+        );
+        expectLater(
+          Stream<int>.fromIterable(data).calm(duration).toList(),
+          completion(data),
+        );
+        expectLater(
+          Stream<int>.fromIterable(data).calm(duration),
+          emitsInOrder(data),
+        );
+        expectLater(
+          () async {
+            final sw = Stopwatch()..start();
+            await Stream<int>.fromIterable(<int>[1, 2, 3])
+                .calm(const Duration(milliseconds: 250))
+                .take(3)
+                .drain<void>();
+            final elapsed = (sw..stop()).elapsedMilliseconds;
+            return elapsed > 500 && elapsed < 750;
+          }(),
+          completion(isTrue),
+        );
+        expectLater(
+          () async {
+            final sw = Stopwatch()..start();
+            await Stream<int>.fromIterable(<int>[1, 2, 3])
+                .asBroadcastStream()
+                .calm(const Duration(milliseconds: 250))
+                .take(3)
+                .drain<void>();
+            final elapsed = (sw..stop()).elapsedMilliseconds;
+            return elapsed > 500 && elapsed < 750;
+          }(),
+          completion(isTrue),
+        );
+      });
     });
