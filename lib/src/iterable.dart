@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math' as math;
 
 /// {@template collection.iterable_extensions}
@@ -44,6 +45,18 @@ extension IterableX<T> on Iterable<T> {
       }
     } finally {
       sw.stop();
+    }
+  }
+
+  /// Return only unique elements from the iterable.
+  /// [hash] function ussumally returning id of the element.
+  Iterable<T> distinct([Object? Function(T a)? hash]) {
+    if (hash != null) {
+      final set = HashSet<Object?>();
+      return where((e) => set.add(hash(e)));
+    } else {
+      final set = HashSet<T>();
+      return where(set.add);
     }
   }
 }
