@@ -14,7 +14,7 @@ Add the following to your `pubspec.yaml` file to be able to do code generation:
 
 ```yaml
 dependencies:
-batteries: any
+  batteries: any
 ```
 
 Then run:
