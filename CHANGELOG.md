@@ -1,7 +1,8 @@
 # 0.0.3-dev
-  
-- added: Calm stream transformer
+
 - **BREAKING**: refactor: Suffix for all extensions
+- added: Calm stream transformer
+- fixed: Stream transformers working before being listined
 
 # 0.0.2-dev
   
