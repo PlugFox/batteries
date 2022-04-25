@@ -175,6 +175,32 @@ void main() => group('stream', () {
           await sub?.cancel();
           await controller.close();
         });
+
+        test(
+          'Transformer and extension yields equivalent results',
+          () async {
+            Future<String> createTransformedStream(
+              Stream<_A> Function(Stream<_A> stream) transform,
+            ) =>
+                transform(
+                  Stream<_A>.fromIterable(const [_B('a'), _C('A'), _B('a')]),
+                ).map((event) => event.value).reduce(sum);
+
+            final extensionResult = await createTransformedStream(
+              (stream) => stream.transformOnType<_C>(
+                (cs) => cs.map((c) => c.value.toUpperCase()).map(_C.new),
+              ),
+            );
+            final transformerResult = await createTransformedStream(
+              (stream) => stream.transform(
+                TransformOnTypeTransformer<_A, _C>(
+                  (cs) => cs.map((c) => c.value.toUpperCase()).map(_C.new),
+                ),
+              ),
+            );
+            expect(extensionResult, transformerResult);
+          },
+        );
       });
       test('calm', () {
         const duration = Duration(microseconds: 150);
