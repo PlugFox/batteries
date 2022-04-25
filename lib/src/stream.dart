@@ -34,7 +34,7 @@ extension BatteriesStreamX<A> on Stream<A> {
 /// the event queue and microtasks.
 /// {@endtemplate}
 @immutable
-class RelieveStreamTransformer<A> extends StreamTransformerBase<A, A> {
+class RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
   /// {@macro stream.relieve_stream_transformer}
   const RelieveStreamTransformer([
     this.duration = const Duration(milliseconds: 4),
