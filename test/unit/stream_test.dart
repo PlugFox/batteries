@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:batteries/batteries.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() => group(
@@ -118,7 +119,7 @@ void main() => group(
               ),
             );
             test(
-              'Transformer retains inertia stream contract on non-broadcast stream',
+              'Retains inertia stream contract on non-broadcast stream',
               () async {
                 StreamSubscription<_A>? sub;
                 var transformedHasEmitted = false;
@@ -208,6 +209,34 @@ void main() => group(
                 expect(extensionResult, transformerResult);
               },
             );
+
+            test('pause', () async {
+              final before = Completer<void>();
+              final after = Completer<void>();
+              final listen = Completer<void>();
+              final sub = Stream<int>.fromIterable(<int>[1, 2, 3])
+                  .map<int>((e) {
+                    // TODO: This is problematic moment.
+                    // Matiunin Mikhail <plugfox@gmail.com>, 26 April 2022
+                    after.complete(); // <=== this is problem
+                    return e;
+                  })
+                  .transformOnType<int>((e) => e)
+                  .map<int>((e) {
+                    after.complete();
+                    return e;
+                  })
+                  .listen((e) {
+                    listen.complete();
+                  })
+                ..pause();
+              await Future.wait<void>(<Future<void>>[
+                expectLater(before.future, doesNotComplete),
+                expectLater(after.future, doesNotComplete),
+                expectLater(listen.future, doesNotComplete),
+              ]);
+              await sub.cancel();
+            });
           },
           timeout: const Timeout(Duration(minutes: 1)),
         );
