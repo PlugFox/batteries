@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:batteries/batteries.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() => group(
@@ -149,8 +148,7 @@ void main() => group(
                 await controller.close();
               },
             );
-            test(
-                'Transformer retains inertia stream contract on broadcast stream',
+            test('Retains inertia stream contract on broadcast stream',
                 () async {
               StreamSubscription<_A>? sub;
               var transformedHasEmitted = false;
@@ -191,7 +189,8 @@ void main() => group(
                 ) =>
                     transform(
                       Stream<_A>.fromIterable(
-                          const [_B('a'), _C('A'), _B('a')]),
+                        const <_A>[_B('a'), _C('A'), _B('a')],
+                      ),
                     ).map((event) => event.value).reduce(sum);
 
                 final extensionResult = await createTransformedStream(
