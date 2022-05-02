@@ -188,45 +188,51 @@ class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
   @override
   Stream<T> bind(Stream<T> stream) {
     final controller = stream.isBroadcast
-        ? StreamController<T>.broadcast(
-            onListen: null,
-            onCancel: null,
-            sync: false,
-          )
-        : StreamController<T>(
-            onListen: null,
-            onCancel: null,
-            onPause: null,
-            onResume: null,
-            sync: false,
-          );
-    final add = controller.add;
-    final addError = controller.addError;
-    final close = controller.close;
-    controller.onListen = () {
-      final subscription = stream.listen(
-        null,
-        onError: addError,
-        onDone: close,
-      );
-      final pause = subscription.pause;
-      final resume = subscription.resume;
-      subscription.onData((T event) {
-        add(event);
-        pause();
-        Future<void>.delayed(duration)
-            .catchError(addError)
-            .whenComplete(resume);
-      });
-      controller.onCancel = subscription.cancel;
-      if (!stream.isBroadcast) {
-        controller
-          ..onPause = pause
-          ..onResume = resume;
-      }
-    };
-    return controller.stream;
+        ? StreamController<T>.broadcast(sync: true)
+        : StreamController<T>(sync: true);
+    return (controller..onListen = () => _onListen(stream, controller)).stream;
   }
+
+  void _onListen(
+    Stream<T> stream,
+    StreamController<T> controller,
+  ) {
+    final sink = controller.sink;
+    final subscription = stream.listen(
+      null,
+      onError: null,
+      onDone: null,
+      cancelOnError: false,
+    );
+    controller.onCancel = subscription.cancel;
+    if (!stream.isBroadcast) {
+      controller
+        ..onPause = subscription.pause
+        ..onResume = subscription.resume;
+    }
+    final scaffold = _scaffold(sink, subscription.pause, subscription.resume);
+    subscription
+      ..onData(scaffold)
+      ..onError(sink.addError)
+      ..onDone(sink.close);
+  }
+
+  void Function(T data) _scaffold(
+    StreamSink<T> sink,
+    void Function([Future<void>? resumeSignal]) pause,
+    void Function() resume,
+  ) =>
+      (T data) {
+        try {
+          sink.add(data);
+          pause();
+          Future<void>.delayed(duration)
+              .catchError(sink.addError)
+              .whenComplete(resume);
+        } on Object catch (error, stackTrace) {
+          sink.addError(error, stackTrace);
+        }
+      };
 }
 
 /// {@template async_stream_handler}
