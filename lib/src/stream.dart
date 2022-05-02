@@ -78,97 +78,60 @@ class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
 
   @override
   Stream<T> bind(Stream<T> stream) {
-    /* 
-    final sw = Stopwatch()..start();
-    StreamSubscription<T>? sub;
-    final sc = stream.isBroadcast
-        ? StreamController<T>.broadcast(
-            onCancel: () => sub?.cancel(),
-            sync: true,
-          )
-        : StreamController<T>(
-            onCancel: () => sub?.cancel(),
-            sync: true,
-          );
-    sub = stream.listen(
-      (T value) {
-        if (sw.elapsed > duration) {
-          sub?.pause();
-          Future<void>.delayed(Duration.zero).then<void>(
-            (_) {
-              sc.add(value);
-              sw.reset();
-              sub?.resume();
-            },
-            onError: sc.addError,
-          );
-        } else {
-          sc.add(value);
-        }
-      },
-      onDone: () {
-        sw.stop();
-        sc.close();
-      },
-      onError: sc.addError,
-      cancelOnError: false,
-    );
-    return sc.stream;
-    */
     final controller = stream.isBroadcast
-        ? StreamController<T>.broadcast(
-            onListen: null,
-            onCancel: null,
-            sync: false,
-          )
-        : StreamController<T>(
-            onListen: null,
-            onCancel: null,
-            onPause: null,
-            onResume: null,
-            sync: false,
-          );
-    final add = controller.add;
-    final addError = controller.addError;
-    final close = controller.close;
-    controller.onListen = () {
-      final stopwatch = Stopwatch()..start();
-      final subscription = stream.listen(
-        null,
-        onError: addError,
-        onDone: () {
-          stopwatch.stop();
-          close();
-        },
-      );
-      final resume = subscription.resume;
-      subscription.onData((T event) {
+        ? StreamController<T>.broadcast(sync: true)
+        : StreamController<T>(sync: true);
+    return (controller..onListen = () => _onListen(stream, controller)).stream;
+  }
+
+  void _onListen(
+    Stream<T> stream,
+    StreamController<T> controller,
+  ) {
+    final stopwatch = Stopwatch()..start();
+    final sink = controller.sink;
+    final subscription = stream.listen(null, cancelOnError: false);
+    controller.onCancel = subscription.cancel;
+    if (!stream.isBroadcast) {
+      controller
+        ..onPause = subscription.pause
+        ..onResume = subscription.resume;
+    }
+    final scaffold = _scaffold(sink, subscription.pause, subscription.resume);
+    subscription
+      ..onData((data) => scaffold(stopwatch, data))
+      ..onError(sink.addError)
+      ..onDone(() {
+        stopwatch.stop();
+        sink.close();
+      });
+  }
+
+  void Function(Stopwatch stopwatch, T data) _scaffold(
+    StreamSink<T> sink,
+    void Function([Future<void>? resumeSignal]) pause,
+    void Function() resume,
+  ) =>
+      (Stopwatch stopwatch, T data) {
         if (stopwatch.elapsed > duration) {
-          subscription.pause();
-          Future<void>.delayed(Duration.zero).then<void>(
-            (_) {
-              add(event);
+          pause();
+          Timer.run(() {
+            try {
+              sink.add(data);
               stopwatch.reset();
               resume();
-            },
-            onError: addError,
-          );
+            } on Object catch (error, stackTrace) {
+              sink.addError(error, stackTrace);
+            }
+          });
         } else {
-          add(event);
+          try {
+            sink.add(data);
+          } on Object catch (error, stackTrace) {
+            sink.addError(error, stackTrace);
+          }
         }
-      });
-      controller.onCancel = () {
-        stopwatch.stop();
-        subscription.cancel();
       };
-      if (!stream.isBroadcast) {
-        controller
-          ..onPause = subscription.pause
-          ..onResume = resume;
-      }
-    };
-    return controller.stream;
-  }
 }
 
 /// {@template stream.calm_stream_transformer}
@@ -198,12 +161,7 @@ class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
     StreamController<T> controller,
   ) {
     final sink = controller.sink;
-    final subscription = stream.listen(
-      null,
-      onError: null,
-      onDone: null,
-      cancelOnError: false,
-    );
+    final subscription = stream.listen(null, cancelOnError: false);
     controller.onCancel = subscription.cancel;
     if (!stream.isBroadcast) {
       controller
@@ -225,13 +183,11 @@ class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
       (T data) {
         try {
           sink.add(data);
-          pause();
-          Future<void>.delayed(duration)
-              .catchError(sink.addError)
-              .whenComplete(resume);
         } on Object catch (error, stackTrace) {
           sink.addError(error, stackTrace);
         }
+        pause();
+        Timer(duration, resume);
       };
 }
 
@@ -273,12 +229,7 @@ class _AsyncStreamHandler<Input, Output>
     StreamController<Output> controller,
   ) {
     final sink = controller.sink;
-    final subscription = stream.listen(
-      null,
-      onError: null,
-      onDone: null,
-      cancelOnError: false,
-    );
+    final subscription = stream.listen(null, cancelOnError: false);
     controller.onCancel = subscription.cancel;
     if (!stream.isBroadcast) {
       controller
