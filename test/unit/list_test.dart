@@ -46,7 +46,7 @@ void main() => group('list', () {
           equals(2),
         );
         expect(
-          ImmutableList<int>.empty().set(1).add(1).length,
+          ImmutableList<int>.empty().upsert(1).add(1).length,
           equals(2),
         );
         expect(
@@ -62,7 +62,7 @@ void main() => group('list', () {
           equals(2),
         );
         expect(
-          ImmutableList<int>.empty().set(1).remove(1),
+          ImmutableList<int>.empty().upsert(1).remove(1),
           isEmpty,
         );
         expect(
@@ -70,7 +70,7 @@ void main() => group('list', () {
           returnsNormally,
         );
         expect(
-          ImmutableList<int>.empty().set(1).set(1).length,
+          ImmutableList<int>.empty().upsert(1).upsert(1).length,
           equals(1),
         );
         expect(
