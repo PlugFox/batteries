@@ -257,18 +257,8 @@ class _AsyncStreamHandler<Input, Output>
   @override
   Stream<Output> bind(Stream<Input> stream) {
     final controller = stream.isBroadcast
-        ? StreamController<Output>.broadcast(
-            onListen: null,
-            onCancel: null,
-            sync: true,
-          )
-        : StreamController<Output>(
-            onListen: null,
-            onCancel: null,
-            onPause: null,
-            onResume: null,
-            sync: true,
-          );
+        ? StreamController<Output>.broadcast(sync: true)
+        : StreamController<Output>(sync: true);
     return (controller..onListen = () => _onListen(stream, controller)).stream;
   }
 
@@ -306,7 +296,7 @@ class _AsyncStreamHandler<Input, Output>
       );
   }
 
-  Future<void> Function(FutureOr<void> Function()) _scaffold(
+  Future<void> Function(FutureOr<void> Function() handler) _scaffold(
     StreamSink<Output> sink,
     void Function([Future<void>? resumeSignal]) pause,
     void Function() resume,
