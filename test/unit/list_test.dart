@@ -34,7 +34,7 @@ void main() => group('list', () {
           equals(100),
         );
         expect(
-          ImmutableList([123]).add(1),
+          ImmutableList(const [123]).add(1),
           isA<ImmutableList>(),
         );
         expect(
@@ -54,11 +54,12 @@ void main() => group('list', () {
           equals([1, 2, 3]),
         );
         expect(
-          ImmutableList<int>(<int>[1, 3, 5, 2, 10]).removeWhere((e) => e > 3),
+          ImmutableList<int>(const <int>[1, 3, 5, 2, 10])
+              .removeWhere((e) => e > 3),
           equals([1, 3, 2]),
         );
         expect(
-          ImmutableList<int>(<int>[1, 2, 3])[1],
+          ImmutableList<int>(const <int>[1, 2, 3])[1],
           equals(2),
         );
         expect(
@@ -82,11 +83,11 @@ void main() => group('list', () {
           throwsStateError,
         );
         expect(
-          ImmutableList<int>(<int>[2, 3, 1]).first,
+          ImmutableList<int>(const <int>[2, 3, 1]).first,
           same(2),
         );
         expect(
-          ImmutableList<int>(<int>[2, 3, 1]).last,
+          ImmutableList<int>(const <int>[2, 3, 1]).last,
           same(1),
         );
         expect(
@@ -94,7 +95,7 @@ void main() => group('list', () {
           isA<Iterator>(),
         );
         expect(
-          ImmutableList<int>(<int>[2, 1, 3, 5]).sort(),
+          ImmutableList<int>(const <int>[2, 1, 3, 5]).sort(),
           equals(<int>[1, 2, 3, 5]),
         );
       });
