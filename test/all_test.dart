@@ -8,10 +8,14 @@ import 'unit/stream_test.dart' as unit_stream;
 import 'unit/string_test.dart' as unit_string;
 
 void main() {
-  group('unit', () {
-    unit_iterable.main();
-    unit_list.main();
-    unit_string.main();
-    unit_stream.main();
-  });
+  group(
+    'unit',
+    () {
+      unit_iterable.main();
+      unit_list.main();
+      unit_string.main();
+      unit_stream.main();
+    },
+    timeout: const Timeout(Duration(minutes: 5)),
+  );
 }
