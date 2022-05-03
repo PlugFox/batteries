@@ -16,6 +16,6 @@ void main() {
       unit_string.main();
       unit_stream.main();
     },
-    timeout: const Timeout(Duration(minutes: 5)),
+    timeout: const Timeout(Duration(minutes: 1)),
   );
 }
