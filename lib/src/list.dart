@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:meta/meta.dart';
+
 /// {@template iterable.immutable_list}
 /// Base class for immutable lists.
 /// Creates an unmodifiable list backed by source.
@@ -7,6 +9,7 @@ import 'dart:collection';
 /// The source of the elements may be a [List] or any [Iterable] with
 /// efficient [Iterable.length] and [Iterable.elementAt].
 /// {@endtemplate}
+@immutable
 class ImmutableList<E> extends IterableBase<E> {
   /// {@macro iterable.immutable_list}
   ImmutableList(Iterable<E> source)
@@ -61,7 +64,7 @@ class ImmutableList<E> extends IterableBase<E> {
 
   /// Set element.
   /// Returns a new list with element.
-  ImmutableList<E> set(E element) => ImmutableList<E>(
+  ImmutableList<E> upsert(E element) => ImmutableList<E>(
         List<E>.of(_source)
           ..remove(element)
           ..add(element),
