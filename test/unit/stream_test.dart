@@ -115,7 +115,9 @@ void main() => group(
                 Future<void>.delayed(Duration(milliseconds: ms));
 
             Stream<int> periodicStream() => Stream<int>.periodic(
-                const Duration(milliseconds: 10), (i) => i);
+                  const Duration(milliseconds: 10),
+                  (i) => i,
+                );
 
             void pass<T>(T data, EventSink<T> sink) {
               sink.add(data);
