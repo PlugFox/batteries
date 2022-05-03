@@ -194,6 +194,7 @@ class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
 /// {@template async_stream_handler}
 /// Stream Transformer with async handlers, saves the order of events.
 /// {@endtemplate}
+@immutable
 class _AsyncStreamHandler<Input, Output>
     extends StreamTransformerBase<Input, Output> {
   /// {@macro async_stream_handler}
