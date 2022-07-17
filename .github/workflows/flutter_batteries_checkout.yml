@@ -59,9 +59,9 @@ jobs:
         timeout-minutes: 1
 
       - name: Check format
-        run: dart format --set-exit-if-changed -l 80 -o none .
+        run: flutter format --set-exit-if-changed -l 80 -o none .
         timeout-minutes: 1
 
       - name: Check analyzer
-        run: dart analyze --fatal-infos --fatal-warnings lib
+        run: flutter analyze --fatal-infos --fatal-warnings lib
         timeout-minutes: 1
