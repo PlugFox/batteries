@@ -35,7 +35,7 @@ jobs:
       run:
         working-directory: ./packages/flutter_batteries
     container:
-      image: plugfox/flutter:beta
+      image: plugfox/flutter:stable
       options: --user root
     timeout-minutes: 10
     steps:
