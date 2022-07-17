@@ -35,7 +35,7 @@ jobs:
       image: dart:beta
     timeout-minutes: 10
     env:
-      working-directory: packages/batteries
+      working-directory: ./packages/batteries
     steps:
       - uses: actions/checkout@v2
         with:
