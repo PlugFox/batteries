@@ -55,7 +55,9 @@ jobs:
         run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: Install Dependencies
-        run: flutter pub get
+        run: |
+          git config --global --add safe.directory /opt/flutter
+          flutter pub get
         timeout-minutes: 1
 
       - name: Check format
