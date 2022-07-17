@@ -58,7 +58,7 @@ class _ValueListenableView<Controller extends Listenable, Value>
   void _update() {
     final newValue = _selector(_controller);
     if (identical(_$value, newValue)) return;
-    if (!(_test?.call(_$value, newValue) ?? false)) return;
+    if (!(_test?.call(_$value, newValue) ?? true)) return;
     _$value = newValue;
     notifyListeners();
   }
