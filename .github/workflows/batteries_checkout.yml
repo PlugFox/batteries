@@ -27,14 +27,13 @@ on:
       - "packages/batteries/test/**.dart"
       - "packages/batteries/example/**.dart"
 
-defaults:
-  run:
-    working-directory: ./packages/batteries
-
 jobs:
   batteries_checkout:
     name: "Checkout batteries"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/batteries
     container:
       image: dart:beta
     timeout-minutes: 10
