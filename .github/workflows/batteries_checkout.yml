@@ -37,9 +37,20 @@ jobs:
     env:
       working-directory: ./packages/batteries
     steps:
-      - uses: actions/checkout@v2
+      - name: 🚂 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 🚃 Cache pub modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-batteries-pub-modules
         with:
-          fetch-depth: 2
+          path: |
+            $PWD/.pub_cache/
+          key: ${{ runner.os }}-batteries
+
+      - name: 🗄️ Export pub cache directory
+        run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: Install Dependencies
         working-directory: ${{ env.working-directory }}
