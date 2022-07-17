@@ -27,6 +27,10 @@ on:
       - "packages/batteries/test/**.dart"
       - "packages/batteries/example/**.dart"
 
+defaults:
+  run:
+    working-directory: ./packages/batteries
+
 jobs:
   batteries_checkout:
     name: "Checkout batteries"
@@ -34,8 +38,6 @@ jobs:
     container:
       image: dart:beta
     timeout-minutes: 10
-    env:
-      working-directory: ./packages/batteries
     steps:
       - name: 🚂 Get latest code
         uses: actions/checkout@v2
@@ -53,17 +55,14 @@ jobs:
         run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: Install Dependencies
-        working-directory: ${{ env.working-directory }}
         run: dart pub get
         timeout-minutes: 1
 
       - name: Check format
-        working-directory: ${{ env.working-directory }}
-        run: dart format --set-exit-if-changed -l 80 -o none .
+        run: cd dart format --set-exit-if-changed -l 80 -o none .
         timeout-minutes: 1
 
       - name: Check analyzer
-        working-directory: ${{ env.working-directory }}
         run: dart analyze --fatal-infos --fatal-warnings lib
         timeout-minutes: 1
 
@@ -71,12 +70,10 @@ jobs:
       #  run: dart pub global activate pana && pana --json --no-warning --line-length 80
 
       - name: Run tests
-        working-directory: ${{ env.working-directory }}
         run: dart test --concurrency=6 --platform vm --coverage=coverage test/
         timeout-minutes: 2
 
       - name: Collect coverage
-        working-directory: ${{ env.working-directory }}
         run: dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
         timeout-minutes: 1
 
@@ -84,13 +81,12 @@ jobs:
         uses: codecov/codecov-action@v2.1.0
         timeout-minutes: 1
         with:
-          working-directory: ${{ env.working-directory }}
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
 
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.2.1
         timeout-minutes: 1
         with:
-          path: ./packages/batteries/coverage/lcov.info
+          path: ./coverage/lcov.info
           min_coverage: 90
           #exclude: '**.g.dart **.freezed.dart'
