@@ -31,12 +31,13 @@ jobs:
   flutter_batteries_checkout:
     name: "Checkout flutter_batteries"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/flutter_batteries
     container:
       image: plugfox/flutter:beta
       options: --user root
     timeout-minutes: 10
-    env:
-      working-directory: ./packages/flutter_batteries
     steps:
       - name: 🚂 Get latest code
         uses: actions/checkout@v2
@@ -54,16 +55,13 @@ jobs:
         run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: Install Dependencies
-        working-directory: ${{ env.working-directory }}
         run: flutter pub get
         timeout-minutes: 1
 
       - name: Check format
-        working-directory: ${{ env.working-directory }}
         run: dart format --set-exit-if-changed -l 80 -o none .
         timeout-minutes: 1
 
       - name: Check analyzer
-        working-directory: ${{ env.working-directory }}
         run: dart analyze --fatal-infos --fatal-warnings lib
         timeout-minutes: 1

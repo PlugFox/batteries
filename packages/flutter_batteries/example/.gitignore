@@ -1,25 +1,3 @@
-# Don’t commit the following directories created by pub.
-.buildlog
-.dart_tool/
-.pub/
-build/
-*.packages
-.idea/
-doc
-
-# Or the files created by dart2js.
-*.dart.js
-*.js_
-*.js.deps
-*.js.map
-
-# Include when developing application packages.
-pubspec.lock
-coverage*
-
-# Codegen
-*.g.dart
-
 # Miscellaneous
 *.class
 *.log
@@ -30,11 +8,13 @@ coverage*
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
+.idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -44,10 +24,12 @@ coverage*
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
+.dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
+.pub/
 /build/
 
 # Web related
@@ -63,8 +45,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# Pana
-log.pana.json
-
-*.log.txt
