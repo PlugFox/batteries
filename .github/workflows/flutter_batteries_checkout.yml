@@ -1,0 +1,55 @@
+name: FLUTTER_BATTERIES / CHECKOUT
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/**"
+      - "bugfix/**"
+      - "hotfix/**"
+      - "support/**"
+    paths:
+      - "packages/flutter_batteries/lib/**.dart"
+      - "packages/flutter_batteries/test/**.dart"
+      - "packages/flutter_batteries/example/**.dart"
+  pull_request:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/**"
+      - "bugfix/**"
+      - "hotfix/**"
+      - "support/**"
+    paths:
+      - "packages/flutter_batteries/lib/**.dart"
+      - "packages/flutter_batteries/test/**.dart"
+      - "packages/flutter_batteries/example/**.dart"
+
+jobs:
+  flutter_batteries_checkout:
+    name: "Checkout flutter_batteries"
+    runs-on: ubuntu-latest
+    container:
+      image: plugfox/flutter:beta
+      options: --user root
+    timeout-minutes: 10
+    env:
+      working-directory: ./packages/flutter_batteries
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Install Dependencies
+        run: flutter pub get
+        timeout-minutes: 1
+        working-directory: ${{ env.working-directory }}
+      - name: Check format
+        run: dart format --set-exit-if-changed -l 80 -o none .
+        timeout-minutes: 1
+        working-directory: ${{ env.working-directory }}
+      - name: Check analyzer
+        run: dart analyze --fatal-infos --fatal-warnings lib
+        timeout-minutes: 1
+        working-directory: ${{ env.working-directory }}
