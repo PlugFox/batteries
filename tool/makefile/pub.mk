@@ -42,4 +42,4 @@ deploy-batteries:
 	@dart pub publish -C ./packages/batteries
 
 deploy-flutter-batteries:
-	@(cd ./packages/flutter_batteries && flutter pub publish -C ./packages/flutter_batteries)
+	@(cd ./packages/flutter_batteries && flutter pub publish)
