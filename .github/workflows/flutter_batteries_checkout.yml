@@ -36,7 +36,7 @@ jobs:
       options: --user root
     timeout-minutes: 10
     env:
-      working-directory: ./packages/flutter_batteries
+      working-directory: packages/flutter_batteries
     steps:
       - uses: actions/checkout@v2
         with:
