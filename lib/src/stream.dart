@@ -2,21 +2,38 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
+// TODO(plugfox): Stream.throttle(leading: bool, debounce: bool, trailing: bool)
+
 /// {@template stream_extensions}
 /// Stream extension methods.
 /// {@endtemplate}
 extension BatteriesStreamX<Input> on Stream<Input> {
-  /// {@macro relieve_stream_transformer}
+  /// {@template relieve_stream_transformer}
+  /// Allow relieve impact on event loop on large collections.
+  /// Parallelize the event queue and free up time for processing animation,
+  /// user gestures without using isolates.
+  ///
+  /// Thats transformer makes stream low priority.
+  ///
+  /// [duration] - elapsed time of iterations before releasing
+  /// the event queue and microtasks.
+  /// {@endtemplate}
   Stream<Input> relieve([
     Duration duration = const Duration(milliseconds: 4),
   ]) =>
       transform<Input>(_RelieveStreamTransformer<Input>(duration));
 
-  /// {@macro calm_stream_transformer}
+  /// {@template calm_stream_transformer}
+  /// Calm stream transformer.
+  /// For example, when you need a pause between events no less than specified.
+  /// e.g sending messages to the messenger with intervals and pauses,
+  /// in order not to be banned for spam.
+  /// {@endtemplate}
   Stream<Input> calm(Duration duration) =>
       transform<Input>(_CalmStreamTransformer<Input>(duration));
 
-  /// {@macro async_stream_handler}
+  /// {@template async_stream_handler}
+  /// Stream Transformer with async handlers, saves the order of events.
   ///
   /// [handleData] is a callback for the stream data channel that takes
   ///   an data and an [EventSink].
@@ -24,6 +41,7 @@ extension BatteriesStreamX<Input> on Stream<Input> {
   ///   an Error with [StackTrace] and an [EventSink].
   /// [handleDone] is a callback for the stream done channel that takes
   ///   an [EventSink].
+  /// {@endtemplate}
   Stream<Output> handle<Output>({
     /// Handler for the stream data channel.
     required FutureOr<void> Function(
@@ -52,16 +70,7 @@ extension BatteriesStreamX<Input> on Stream<Input> {
       );
 }
 
-/// {@template relieve_stream_transformer}
-/// Allow relieve impact on event loop on large collections.
-/// Parallelize the event queue and free up time for processing animation,
-/// user gestures without using isolates.
-///
-/// Thats transformer makes stream low priority.
-///
-/// [duration] - elapsed time of iterations before releasing
-/// the event queue and microtasks.
-/// {@endtemplate}
+/// {@macro relieve_stream_transformer}
 @immutable
 class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
   /// {@macro relieve_stream_transformer}
@@ -131,12 +140,7 @@ class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
       };
 }
 
-/// {@template calm_stream_transformer}
-/// Calm stream transformer.
-/// For example, when you need a pause between events no less than specified.
-/// e.g sending messages to the messenger with intervals and pauses,
-/// in order not to be banned for spam.
-/// {@endtemplate}
+/// {@macro calm_stream_transformer}
 @immutable
 class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
   /// {@macro calm_stream_transformer}
@@ -188,9 +192,7 @@ class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
       };
 }
 
-/// {@template async_stream_handler}
-/// Stream Transformer with async handlers, saves the order of events.
-/// {@endtemplate}
+/// {@macro async_stream_handler}
 @immutable
 class _AsyncStreamHandler<Input, Output>
     extends StreamTransformerBase<Input, Output> {
