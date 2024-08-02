@@ -69,7 +69,8 @@ jobs:
         id: export-pub-cache
         timeout-minutes: 1
         run: |
-          echo "::set-env name=PUB_CACHE::${HOME}/.pub-cache"
+          export PUB_CACHE=$PWD/.pub_cache/
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
           echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
 
       - name: 👷 Install Dependencies
