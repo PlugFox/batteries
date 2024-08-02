@@ -2,10 +2,6 @@ version: 2
 enable-beta-ecosystems: true
 updates:
   - package-ecosystem: "pub"
-    directory: "packages/batteries"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "pub"
-    directory: "packages/flutter_batteries"
+    directory: "."
     schedule:
       interval: "weekly"
