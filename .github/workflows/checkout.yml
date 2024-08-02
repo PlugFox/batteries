@@ -62,15 +62,15 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: |
-            $PWD/.pub_cache/
+            $HOME/.pub-cache
           key: ${{ runner.os }}-${{ env.pub-cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
 
       - name: 🗄️ Export Pub cache directory
         id: export-pub-cache
         timeout-minutes: 1
         run: |
-          export PUB_CACHE=$PWD/.pub_cache/
-          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          echo "::set-env name=PUB_CACHE::${HOME}/.pub-cache"
+          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
 
       - name: 👷 Install Dependencies
         id: install-dependencies
@@ -85,7 +85,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: |
-            $PWD/.pub_cache/
+            $HOME/.pub-cache
           key: ${{ runner.os }}-${{ env.pub-cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
 
       - name: 🔎 Check format
@@ -126,7 +126,7 @@ jobs:
         timeout-minutes: 2
         run: |
           mv coverage/lcov.info coverage/lcov.base.info
-          lcov --remove coverage/lcov.base.info'*.g.dart' -o coverage/lcov.info
+          lcov --remove coverage/lcov.base.info '*.g.dart' -o coverage/lcov.info
           lcov --list coverage/lcov.info
           THRESHOLD=${{ env.threshold }}
           COVERAGE=$(lcov --summary coverage/lcov.info | grep -i 'lines\|Total:' | tail -n 1 | awk '{print $2}' | sed 's/%//')
