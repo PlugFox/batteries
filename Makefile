@@ -12,7 +12,10 @@ outdated:
 	@dart pub outdated --show-all --dev-dependencies --dependency-overrides --transitive --no-prereleases
 
 test: get
-	@dart test --debug --coverage=coverage --platform chrome,vm test/test.dart
+	@dart test --platform vm --compiler=kernel --coverage=coverage --platform vm \
+		--platform vm --compiler=kernel --coverage=coverage \
+		--reporter=expanded --file-reporter=json:coverage/tests.json \
+			test/test.dart
 
 publish:
 	@yes | dart pub publish

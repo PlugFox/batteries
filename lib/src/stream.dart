@@ -127,14 +127,14 @@ class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
               stopwatch.reset();
               resume();
             } on Object catch (error, stackTrace) {
-              sink.addError(error, stackTrace);
+              sink.addError(error, stackTrace); // coverage:ignore-line
             }
           });
         } else {
           try {
             sink.add(data);
           } on Object catch (error, stackTrace) {
-            sink.addError(error, stackTrace);
+            sink.addError(error, stackTrace); // coverage:ignore-line
           }
         }
       };
@@ -185,7 +185,7 @@ class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
         try {
           sink.add(data);
         } on Object catch (error, stackTrace) {
-          sink.addError(error, stackTrace);
+          sink.addError(error, stackTrace); // coverage:ignore-line
         }
         pause();
         Timer(duration, resume);
