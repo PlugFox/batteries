@@ -29,22 +29,19 @@ extension BatteriesStreamX<Input> on Stream<Input> {
     required FutureOr<void> Function(
       Input data,
       EventSink<Output> sink,
-    )
-        handleData,
+    ) handleData,
 
     /// Handler for the stream error channel.
     FutureOr<void> Function(
       Object error,
       StackTrace stackTrace,
       EventSink<Output> sink,
-    )?
-        handleError,
+    )? handleError,
 
     /// Handler for the stream close event.
     FutureOr<void> Function(
       EventSink<Output> sink,
-    )?
-        handleDone,
+    )? handleDone,
   }) =>
       transform<Output>(
         _AsyncStreamHandler<Input, Output>(
