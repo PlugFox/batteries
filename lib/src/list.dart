@@ -10,27 +10,22 @@ import 'package:meta/meta.dart';
 /// efficient [Iterable.length] and [Iterable.elementAt].
 /// {@endtemplate}
 @immutable
-class ImmutableList<E> extends IterableBase<E> {
-  /// {@macro iterable.immutable_list}
-  ImmutableList(Iterable<E> source)
-      : _source = List<E>.of(source, growable: false);
+extension type const ImmutableList<E>(List<E> _source)
+    implements IterableBase<E> {
+  /// {@macro immutable_list}
+  factory ImmutableList.from(Iterable<E> source) =>
+      ImmutableList<E>(List<E>.from(source, growable: false));
 
-  /// {@macro iterable.immutable_list}
+  /// {@macro immutable_list}
   /// Empty collection
-  const ImmutableList.empty() : _source = const Iterable.empty();
+  const ImmutableList.empty() : _source = const [];
 
-  final Iterable<E> _source;
-
-  @override
   ImmutableList<R> cast<R>() => ImmutableList<R>(_source.cast<R>());
 
-  @override
   int get length => _source.length;
 
-  @override
   E get last => _source.last;
 
-  @override
   Iterator<E> get iterator => _source.iterator;
 
   /// Adds [value] to the end of this list,

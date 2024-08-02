@@ -87,7 +87,6 @@ linter:
     avoid_js_rounded_ints: true
     avoid_print: true
     avoid_renaming_method_parameters: true
-    avoid_returning_null_for_future: true
     avoid_returning_null_for_void: true
     avoid_single_cascade_in_expression_statements: true
     avoid_slow_async_io: true
@@ -99,10 +98,8 @@ linter:
     close_sinks: true
     control_flow_in_finally: true
     empty_statements: true
-    iterable_contains_unrelated_type: true
     join_return_with_assignment: true
     leading_newlines_in_multiline_strings: true
-    list_remove_unrelated_type: true
     literal_only_boolean_expressions: true
     missing_whitespace_between_adjacent_strings: true
     no_adjacent_strings_in_list: true
@@ -148,7 +145,6 @@ linter:
     valid_regexps: true
     void_checks: true
     always_declare_return_types: true
-    always_require_non_null_named_parameters: true
     annotate_overrides: true
     avoid_empty_else: true
     avoid_init_to_null: true
@@ -212,7 +208,6 @@ linter:
     avoid_classes_with_only_static_members: true
     use_setters_to_change_properties: true
     avoid_setters_without_getters: true
-    avoid_returning_null: true
     avoid_returning_this: true
     type_annotate_public_apis: true
     avoid_private_typedef_functions: true

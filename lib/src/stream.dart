@@ -6,13 +6,13 @@ import 'package:meta/meta.dart';
 /// Stream extension methods.
 /// {@endtemplate}
 extension BatteriesStreamX<Input> on Stream<Input> {
-  /// {@macro stream.relieve_stream_transformer}
+  /// {@macro relieve_stream_transformer}
   Stream<Input> relieve([
     Duration duration = const Duration(milliseconds: 4),
   ]) =>
       transform<Input>(_RelieveStreamTransformer<Input>(duration));
 
-  /// {@macro stream.calm_stream_transformer}
+  /// {@macro calm_stream_transformer}
   Stream<Input> calm(Duration duration) =>
       transform<Input>(_CalmStreamTransformer<Input>(duration));
 
@@ -64,7 +64,7 @@ extension BatteriesStreamX<Input> on Stream<Input> {
 /// {@endtemplate}
 @immutable
 class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
-  /// {@macro stream.relieve_stream_transformer}
+  /// {@macro relieve_stream_transformer}
   const _RelieveStreamTransformer([
     this.duration = const Duration(milliseconds: 4),
   ]);
@@ -139,7 +139,7 @@ class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
 /// {@endtemplate}
 @immutable
 class _CalmStreamTransformer<T> extends StreamTransformerBase<T, T> {
-  /// {@macro stream.calm_stream_transformer}
+  /// {@macro calm_stream_transformer}
   const _CalmStreamTransformer(this.duration);
 
   /// Elapsed time of iterations before releasing next event.

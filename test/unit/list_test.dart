@@ -8,15 +8,15 @@ void main() => group(
       () {
         test('immutable_list', () {
           expect(
-            () => ImmutableList(Iterable<int>.generate(100)),
+            () => ImmutableList.from(Iterable<int>.generate(100)),
             returnsNormally,
           );
           expect(
-            ImmutableList(Iterable<int>.generate(100)),
+            ImmutableList.from(Iterable<int>.generate(100)),
             isA<Iterable<int>>(),
           );
           expect(
-            ImmutableList(Iterable<int>.generate(100)),
+            ImmutableList.from(Iterable<int>.generate(100)),
             isA<Iterable<num>>(),
           );
           expect(
@@ -24,15 +24,15 @@ void main() => group(
             equals(const Iterable<int>.empty()),
           );
           expect(
-            ImmutableList(Iterable<int>.generate(100)).cast<num>(),
+            ImmutableList.from(Iterable<int>.generate(100)).cast<num>(),
             isA<Iterable<num>>(),
           );
           expect(
-            ImmutableList(Iterable<int>.generate(100)).cast<num>(),
+            ImmutableList.from(Iterable<int>.generate(100)).cast<num>(),
             isNot(isA<Iterable<int>>()),
           );
           expect(
-            ImmutableList(Iterable<int>.generate(100)).length,
+            ImmutableList.from(Iterable<int>.generate(100)).length,
             equals(100),
           );
           expect(
