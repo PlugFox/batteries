@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-/// {@template stream.stream_extensions}
+/// {@template stream_extensions}
 /// Stream extension methods.
 /// {@endtemplate}
 extension BatteriesStreamX<Input> on Stream<Input> {
@@ -52,7 +52,7 @@ extension BatteriesStreamX<Input> on Stream<Input> {
       );
 }
 
-/// {@template stream.relieve_stream_transformer}
+/// {@template relieve_stream_transformer}
 /// Allow relieve impact on event loop on large collections.
 /// Parallelize the event queue and free up time for processing animation,
 /// user gestures without using isolates.
@@ -131,7 +131,7 @@ class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
       };
 }
 
-/// {@template stream.calm_stream_transformer}
+/// {@template calm_stream_transformer}
 /// Calm stream transformer.
 /// For example, when you need a pause between events no less than specified.
 /// e.g sending messages to the messenger with intervals and pauses,

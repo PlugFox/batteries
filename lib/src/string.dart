@@ -1,6 +1,6 @@
 import 'iterable.dart' show BatteriesCodeUnitsX;
 
-/// {@template string.string_extensions}
+/// {@template string_extensions}
 /// String extensions.
 /// {@endtemplate}
 extension BatteriesStringX on String {

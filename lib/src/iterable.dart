@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
-/// {@template collection.iterable_extensions}
+/// {@template iterable_extensions}
 /// [Iterable] extension methods.
 /// {@endtemplate}
 extension BatteriesIterableX<T> on Iterable<T> {
@@ -61,7 +61,7 @@ extension BatteriesIterableX<T> on Iterable<T> {
   }
 }
 
-/// {@template iterable.code_units}
+/// {@template code_units}
 /// Iterable<int> as code units.
 /// {@endtemplate}
 extension BatteriesCodeUnitsX on Iterable<int> {

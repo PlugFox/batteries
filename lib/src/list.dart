@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:meta/meta.dart';
 
-/// {@template iterable.immutable_list}
+/// {@template immutable_list}
 /// Base class for immutable lists.
 /// Creates an unmodifiable list backed by source.
 ///
