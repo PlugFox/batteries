@@ -42,7 +42,7 @@ jobs:
       image: dart:stable
     env:
       pub-cache-name: pub
-      threshold: 50
+      threshold: 95
     timeout-minutes: 10
     steps:
       - name: 🚂 Get latest code
